@@ -1,217 +1,217 @@
 -- Active: 1777529110319@@127.0.0.1@3306@dbpracticas
-CREATE DATABASE dbpracticas;
+create database dbpracticas;
 
-USE dbpracticas;
+use dbpracticas;
 
-CREATE TABLE rol (
-    codRol INT PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL,
-    descr VARCHAR(255) NOT NULL,
-    permi VARCHAR(255) NOT NULL
+create table rol (
+    codRol int primary key,
+    nom varchar(50) not null,
+    descr varchar(255) not null,
+    permi varchar(255) not null
 );
 
-CREATE TABLE usuario (
-    codUsu INT PRIMARY KEY,
-    nom1 VARCHAR(20) NOT NULL,
-    nom2 VARCHAR(20) NOT NULL,
-    ape1 VARCHAR(20) NOT NULL,
-    ape2 VARCHAR(20) NOT NULL,
-    correo VARCHAR(150) UNIQUE NOT NULL,
-    contr VARCHAR(150),
-    tel VARCHAR(20),
-    dire VARCHAR(150),
-    fechnac DATETIME,
-    estado VARCHAR(50)
+create table usuario (
+    codUsu int primary key,
+    nom1 varchar(20) not null,
+    nom2 varchar(20) not null,
+    ape1 varchar(20) not null,
+    ape2 varchar(20) not null,
+    correo varchar(150) unique not null,
+    contr varchar(150),
+    tel varchar(20),
+    dire varchar(150),
+    fechnac datetime,
+    estado varchar(50)
 );
 
-CREATE TABLE empresa (
-    codEmp INT PRIMARY KEY,
-    ruc CHAR(13) UNIQUE NOT NULL,
-    razsocial VARCHAR(20),
-    nomcomer VARCHAR(100),
-    dirfisc VARCHAR(150),
-    telprinc VARCHAR(20),
-    correo VARCHAR(150),
-    pagweb VARCHAR(20),
-    reprelegal VARCHAR(150),
-    fechcrea DATETIME NOT NULL,
-    canttrabaj INT,
-    est VARCHAR(50)
+create table empresa (
+    codEmp int primary key,
+    ruc CHAR(13) unique not null,
+    razsocial varchar(20),
+    nomcomer varchar(100),
+    dirfisc varchar(150),
+    telprinc varchar(20),
+    correo varchar(150),
+    pagweb varchar(20),
+    reprelegal varchar(150),
+    fechcrea datetime not null,
+    canttrabaj int,
+    est varchar(50)
 );
 
 create table facultad (
-    codFac INT PRIMARY KEY,
-    nom VARCHAR(150)
+    codFac int primary key,
+    nom varchar(150)
 );
 
-CREATE TABLE carrera (
-    codCar INT PRIMARY KEY,
-    nom VARCHAR(150),
-    durcic INT,
-    gradacad VARCHAR(100),
-    dircarr VARCHAR(150),
-    est VARCHAR(50),
-    codFac INT NOT NULL,
-    CONSTRAINT fk_facultad FOREIGN KEY (codFac) REFERENCES facultad (codFac)
+create table carrera (
+    codCar int primary key,
+    nom varchar(150),
+    durcic int,
+    gradacad varchar(100),
+    dircarr varchar(150),
+    est varchar(50),
+    codFac int not null,
+    constraint fk_facultad foreign key (codFac) references facultad (codFac)
 );
 
-CREATE TABLE usuario_rol (
-    codUsu INT,
-    codRol INT,
-    PRIMARY KEY (codUsu, codRol),
-    CONSTRAINT fk_usuario FOREIGN KEY (codUsu) REFERENCES usuario (codUsu),
-    CONSTRAINT fk_rol FOREIGN KEY (codRol) REFERENCES rol (codRol)
+create table usuario_rol (
+    codUsu int,
+    codRol int,
+    primary key (codUsu, codRol),
+    constraint fk_usuario foreign key (codUsu) references usuario (codUsu),
+    constraint fk_rol foreign key (codRol) references rol (codRol)
 );
 
-CREATE TABLE estudiante (
-    codEst INT PRIMARY KEY,
-    codUni VARCHAR(10) UNIQUE NOT NULL,
-    ciclo INT NOT NULL,
-    promponder INT,
-    codCar INT NOT NULL,
-    estacad VARCHAR(50),
-    CONSTRAINT fk_carrera_estudiante FOREIGN KEY (codCar) REFERENCES carrera(codCar),
-    CONSTRAINT fk_usuario_estudiante FOREIGN KEY (codEst) REFERENCES usuario(codUsu)
+create table estudiante (
+    codEst int primary key,
+    codUni varchar(10) unique not null,
+    ciclo int not null,
+    promponder int,
+    codCar int not null,
+    estacad varchar(50),
+    constraint fk_carrera_estudiante foreign key (codCar) references carrera(codCar),
+    constraint fk_usuario_estudiante foreign key (codEst) references usuario(codUsu)
 );
 
-CREATE TABLE sucursal (
-    codsuc INT PRIMARY KEY,
-    nomsuc VARCHAR(150),
-    dist VARCHAR(100),
-    ciu VARCHAR(100),
-    tel VARCHAR(20),
-    corr_cont VARCHAR(150),
-    respsuc VARCHAR(150),
-    codEmp INT,
-    FOREIGN KEY (codEmp) REFERENCES empresa(codEmp)
+create table sucursal (
+    codsuc int primary key,
+    nomsuc varchar(150),
+    dist varchar(100),
+    ciu varchar(100),
+    tel varchar(20),
+    corr_cont varchar(150),
+    respsuc varchar(150),
+    codEmp int,
+    foreign key (codEmp) references empresa(codEmp)
 );
 
-CREATE TABLE convenio (
-    codCon INT PRIMARY KEY,
-    fecinic DATETIME NOT NULL,
-    fecfin DATETIME NOT NULL,
-    tipconv VARCHAR(50) NOT NULL,
-    est VARCHAR(20) NOT NULL,
-    numvac INT NOT NULL,
-    observ VARCHAR(255),
-    respons VARCHAR(150) NOT NULL,
-    represen VARCHAR(150) NOT NULL,
-    codEmp INT,
-    CONSTRAINT fk_empresa FOREIGN KEY (codEmp) REFERENCES empresa (codEmp)
+create table convenio (
+    codCon int primary key,
+    fecinic datetime not null,
+    fecfin datetime not null,
+    tipconv varchar(50) not null,
+    est varchar(20) not null,
+    numvac int not null,
+    observ varchar(255),
+    respons varchar(150) not null,
+    represen varchar(150) not null,
+    codEmp int,
+    constraint fk_empresa foreign key (codEmp) references empresa (codEmp)
 );
 
-CREATE TABLE documento (
-    codDocu INT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    tip VARCHAR(50) NOT NULL,
-    fechemi DATETIME NOT NULL,
-    fechcar DATETIME NOT NULL,
-    form VARCHAR(20),
-    tama VARCHAR (20),
-    est VARCHAR(20),
+create table documento (
+    codDocu int primary key,
+    nom varchar(100) not null,
+    tip varchar(50) not null,
+    fechemi datetime not null,
+    fechcar datetime not null,
+    form varchar(20),
+    tama varchar (20),
+    est varchar(20),
     obser TEXT,
-    ubicarchi VARCHAR(150),
-    codEst INT,
-    CONSTRAINT fk_estudiante FOREIGN KEY (codEst) REFERENCES estudiante(codEst)
+    ubicarchi varchar(150),
+    codEst int,
+    constraint fk_estudiante foreign key (codEst) references estudiante(codEst)
 );
 
-CREATE TABLE asesor (
-    codAse INT PRIMARY KEY,
-    espec VARCHAR(150) NOT NULL,
-    facult VARCHAR(150) NOT NULL,
-    est VARCHAR(50),
-    CONSTRAINT fk_usuario_asesor FOREIGN KEY (codAse) REFERENCES usuario(codUsu)
+create table asesor (
+    codAse int primary key,
+    espec varchar(150) not null,
+    facult varchar(150) not null,
+    est varchar(50),
+    constraint fk_usuario_asesor foreign key (codAse) references usuario(codUsu)
 );
 
-CREATE TABLE supervisor (
-    codSup INT PRIMARY KEY,
-    carg VARCHAR(100),
-    area_trab VARCHAR(150),
+create table supervisor (
+    codSup int primary key,
+    carg varchar(100),
+    area_trab varchar(150),
     exp_lab TEXT,
-    est VARCHAR(50),
-    CONSTRAINT fk_usuario_supervisor FOREIGN KEY (codSup) REFERENCES usuario (codUsu)
+    est varchar(50),
+    constraint fk_usuario_supervisor foreign key (codSup) references usuario (codUsu)
 );
 
-CREATE TABLE practica_oferta (
-    codPracOfe INT PRIMARY KEY,
-    titulo VARCHAR(150) NOT NULL,
+create table practica_oferta (
+    codPracOfe int primary key,
+    titulo varchar(150) not null,
     descrip TEXT,
-    funcion INT NOT NULL,
-    req VARCHAR(50) NOT NULL,
-    modal INT,
-    horar VARCHAR(50),
-    durac INT,
-    remune INT,
-    fechpub DATETIME,
-    fecierre DATETIME,
-    cantvac INT,
-    est VARCHAR(50),
-    codSuc INT,
-    CONSTRAINT fk_sucursal FOREIGN KEY (codSuc) REFERENCES sucursal (codsuc)
+    funcion int not null,
+    req varchar(50) not null,
+    modal int,
+    horar varchar(50),
+    durac int,
+    remune int,
+    fechpub datetime,
+    fecierre datetime,
+    cantvac int,
+    est varchar(50),
+    codSuc int,
+    constraint fk_sucursal foreign key (codSuc) references sucursal (codsuc)
 );
 
-CREATE TABLE convenio_carrera (
-    codCon INT,
-    codCar INT,
-    PRIMARY KEY (codCon, codCar),
-    FOREIGN KEY (codCon) REFERENCES convenio (codCon),
-    FOREIGN KEY (codCar) REFERENCES carrera (codCar)
+create table convenio_carrera (
+    codCon int,
+    codCar int,
+    primary key (codCon, codCar),
+    foreign key (codCon) references convenio (codCon),
+    foreign key (codCar) references carrera (codCar)
 );
 
-CREATE TABLE postulacion (
-    codPost INT PRIMARY KEY,
-    fecpost DATETIME,
-    estpost VARCHAR(50),
-    puntaje INT,
-    fechresp DATETIME,
-    medcontac INT NOT NULL,
-    codEst INT,
+create table postulacion (
+    codPost int primary key,
+    fecpost datetime,
+    estpost varchar(50),
+    puntaje int,
+    fechresp datetime,
+    medcontac int not null,
+    codEst int,
     observ TEXT,
-    codPracOfe INT,
-    CONSTRAINT fk_practicaoferta FOREIGN KEY (codPracOfe) REFERENCES practica_oferta (codPracOfe),
-    CONSTRAINT fk_estudiante_postulacion FOREIGN KEY (codEst) REFERENCES estudiante (codEst)
+    codPracOfe int,
+    constraint fk_practicaoferta foreign key (codPracOfe) references practica_oferta (codPracOfe),
+    constraint fk_estudiante_postulacion foreign key (codEst) references estudiante (codEst)
 );
 
-CREATE TABLE practicaoferta_carrera (
-    codPracOfe INT,
-    codCar INT,
-    PRIMARY KEY (codPracOfe, codCar),
-    FOREIGN KEY (codPracOfe) REFERENCES practica_oferta (codPracOfe),
-    FOREIGN KEY (codCar) REFERENCES carrera (codCar)
+create table practicaoferta_carrera (
+    codPracOfe int,
+    codCar int,
+    primary key (codPracOfe, codCar),
+    foreign key (codPracOfe) references practica_oferta (codPracOfe),
+    foreign key (codCar) references carrera (codCar)
 );
 
-CREATE TABLE informefinal (
-    codInforFi INT PRIMARY KEY,
-    titu VARCHAR (100),
-    fechent DATETIME,
-    estrev VARCHAR (30),
+create table informefinal (
+    codInforFi int primary key,
+    titu varchar (100),
+    fechent datetime,
+    estrev varchar (30),
     obsase TEXT,
     notfin DECIMAL(5,2),
-    fechpro DATETIME
+    fechpro datetime
 );
 
-CREATE TABLE practicarealizada (
-    codPracReal INT PRIMARY KEY,
-    fecinic DATETIME,
-    fecfin DATETIME,
-    modalidad INT,
-    jornsema INT,
-    est VARCHAR(50),
-    horacumul INT,
-    areaasign INT,
+create table practicarealizada (
+    codPracReal int primary key,
+    fecinic datetime,
+    fecfin datetime,
+    modalidad int,
+    jornsema int,
+    est varchar(50),
+    horacumul int,
+    areaasign int,
     observ TEXT,
-    codAse INT,
-    codSup INT,
-    CONSTRAINT fk_asesor FOREIGN KEY (codAse) REFERENCES asesor (codAse),
-    CONSTRAINT fk_supervisor_practicarealizada FOREIGN KEY (codSup) REFERENCES supervisor (codSup)
+    codAse int,
+    codSup int,
+    constraint fk_asesor foreign key (codAse) references asesor (codAse),
+    constraint fk_supervisor_practicarealizada foreign key (codSup) references supervisor (codSup)
 );
 
-CREATE TABLE practicarealizada_informefinal(
-    codInforFi INT,
-    codPracReal INT,
-    PRIMARY KEY (codInforFi, codPracReal),
-    FOREIGN KEY (codInforFi) REFERENCES informefinal(codInforFi),
-    FOREIGN KEY (codPracReal) REFERENCES practicarealizada(codPracReal)
+create table practicarealizada_informefinal(
+    codInforFi int,
+    codPracReal int,
+    primary key (codInforFi, codPracReal),
+    foreign key (codInforFi) references informefinal(codInforFi),
+    foreign key (codPracReal) references practicarealizada(codPracReal)
 );
 
 create table seguimiento (
@@ -236,7 +236,7 @@ create table certificado(
     cargdese varchar(100),
     firmresp varchar(100),
     obs text,
-    FOREIGN KEY (codPracReal) REFERENCES practicarealizada(codPracReal)
+    foreign key (codPracReal) references practicarealizada(codPracReal)
 );
 
 create table evaluacion (
