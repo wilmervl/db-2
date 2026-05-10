@@ -11,7 +11,7 @@ create table rol (
 );
 
 create table usuario (
-    codUsu int primary key,
+    codUsu int auto_increment primary key,
     nom1 varchar(20) not null,
     nom2 varchar(20) not null,
     ape1 varchar(20) not null,
@@ -25,7 +25,7 @@ create table usuario (
 );
 
 create table empresa (
-    codEmp int primary key,
+    codEmp int auto_increment primary key,
     ruc CHAR(13) unique not null,
     razsocial varchar(20),
     nomcomer varchar(100),
@@ -75,7 +75,7 @@ create table estudiante (
 );
 
 create table sucursal (
-    codsuc int primary key,
+    codsuc int auto_increment  primary key,
     nomsuc varchar(150),
     dist varchar(100),
     ciu varchar(100),
@@ -87,7 +87,7 @@ create table sucursal (
 );
 
 create table convenio (
-    codCon int primary key,
+    codCon int auto_increment primary key,
     fecinic datetime not null,
     fecfin datetime not null,
     tipconv varchar(50) not null,
@@ -118,9 +118,11 @@ create table documento (
 create table asesor (
     codAse int primary key,
     espec varchar(150) not null,
-    facult varchar(150) not null,
+    codFac int not null,
     est varchar(50),
-    constraint fk_usuario_asesor foreign key (codAse) references usuario(codUsu)
+
+    constraint fk_usuario_asesor foreign key (codAse) references usuario(codUsu),
+    constraint fk_facultad_asesor foreign key (codFac) references facultad(codFac)
 );
 
 create table supervisor (
@@ -215,7 +217,7 @@ create table practicarealizada_informefinal(
 );
 
 create table seguimiento (
-    codSeg int primary key,
+    codSeg int auto_increment primary key,
     fech date,
     tip varchar(50),
     descrip varchar(255),
@@ -240,7 +242,7 @@ create table certificado(
 );
 
 create table evaluacion (
-    codEval int primary key,
+    codEval int auto_increment primary key,
     fech date,
     crit varchar(50),
     coment varchar(255),
