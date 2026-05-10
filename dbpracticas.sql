@@ -181,16 +181,6 @@ create table practicaoferta_carrera (
     foreign key (codCar) references carrera (codCar)
 );
 
-create table informefinal (
-    codInforFi int primary key,
-    titu varchar (100),
-    fechent datetime,
-    estrev varchar (30),
-    obsase TEXT,
-    notfin DECIMAL(5,2),
-    fechpro datetime
-);
-
 create table practicarealizada (
     codPracReal int primary key,
     fecinic datetime,
@@ -207,12 +197,15 @@ create table practicarealizada (
     constraint fk_supervisor_practicarealizada foreign key (codSup) references supervisor (codSup)
 );
 
-create table practicarealizada_informefinal(
-    codInforFi int,
-    codPracReal int,
-    primary key (codInforFi, codPracReal),
-    foreign key (codInforFi) references informefinal(codInforFi),
-    foreign key (codPracReal) references practicarealizada(codPracReal)
+create table informefinal (
+    codInforFi int primary key,
+    titu varchar (100),
+    fechent datetime,
+    estrev varchar (30),
+    obsase TEXT,
+    notfin DECIMAL(5,2),
+    fechpro datetime,
+    constraint fk_informefinal_practicarealizada foreign key (codInforFi) references practicarealizada (codPracReal)
 );
 
 create table seguimiento (
