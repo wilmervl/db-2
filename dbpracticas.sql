@@ -1,4 +1,3 @@
--- Active: 1777529110319@@127.0.0.1@3306@dbpracticas
 create database dbpracticas;
 
 use dbpracticas;
@@ -27,12 +26,12 @@ create table usuario (
 create table empresa (
     codEmp int auto_increment primary key,
     ruc CHAR(13) unique not null,
-    razsocial varchar(20),
+    razsocial varchar(50),
     nomcomer varchar(100),
     dirfisc varchar(150),
     telprinc varchar(20),
     correo varchar(150),
-    pagweb varchar(20),
+    pagweb varchar(100),
     reprelegal varchar(150),
     fechcrea datetime not null,
     canttrabaj int,

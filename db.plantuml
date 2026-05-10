@@ -1,0 +1,285 @@
+@startuml
+hide circle
+left to right direction
+skinparam linetype polyline
+
+entity rol {
+    * codRol : int <<PK>>
+    --
+    nom : varchar(50)
+    descr : varchar(255)
+    permi : varchar(255)
+}
+
+entity usuario {
+    * codUsu : int <<PK>>
+    --
+    nom1 : varchar(20)
+    nom2 : varchar(20)
+    ape1 : varchar(20)
+    ape2 : varchar(20)
+    correo : varchar(150)
+    contr : varchar(150)
+    tel : varchar(20)
+    dire : varchar(150)
+    fechnac : datetime
+    estado : varchar(50)
+}
+
+entity empresa {
+    * codEmp : int <<PK>>
+    --
+    ruc : char(13)
+    razsocial : varchar(20)
+    nomcomer : varchar(100)
+    dirfisc : varchar(150)
+    telprinc : varchar(20)
+    correo : varchar(150)
+    pagweb : varchar(20)
+    reprelegal : varchar(150)
+    fechcrea : datetime
+    canttrabaj : int
+    est : varchar(50)
+}
+
+entity facultad {
+    * codFac : int <<PK>>
+    --
+    nom : varchar(150)
+}
+
+entity carrera {
+    * codCar : int <<PK>>
+    --
+    nom : varchar(150)
+    durcic : int
+    gradacad : varchar(100)
+    dircarr : varchar(150)
+    est : varchar(50)
+    codFac : int <<FK>>
+}
+
+entity usuario_rol {
+    * codUsu : int <<PK, FK>>
+    * codRol : int <<PK, FK>>
+}
+
+entity estudiante {
+    * codEst : int <<PK, FK>>
+    --
+    codUni : varchar(10)
+    ciclo : int
+    promponder : int
+    codCar : int <<FK>>
+    estacad : varchar(50)
+}
+
+entity sucursal {
+    * codsuc : int <<PK>>
+    --
+    nomsuc : varchar(150)
+    dist : varchar(100)
+    ciu : varchar(100)
+    tel : varchar(20)
+    corr_cont : varchar(150)
+    respsuc : varchar(150)
+    codEmp : int <<FK>>
+}
+
+entity convenio {
+    * codCon : int <<PK>>
+    --
+    fecinic : datetime
+    fecfin : datetime
+    tipconv : varchar(50)
+    est : varchar(20)
+    numvac : int
+    observ : varchar(255)
+    respons : varchar(150)
+    represen : varchar(150)
+    codEmp : int <<FK>>
+}
+
+entity documento {
+    * codDocu : int <<PK>>
+    --
+    nom : varchar(100)
+    tip : varchar(50)
+    fechemi : datetime
+    fechcar : datetime
+    form : varchar(20)
+    tama : varchar(20)
+    est : varchar(20)
+    obser : text
+    ubicarchi : varchar(150)
+    codEst : int <<FK>>
+}
+
+entity asesor {
+    * codAse : int <<PK, FK>>
+    --
+    espec : varchar(150)
+    codFac : int <<FK>>
+    est : varchar(50)
+}
+
+entity supervisor {
+    * codSup : int <<PK, FK>>
+    --
+    carg : varchar(100)
+    area_trab : varchar(150)
+    exp_lab : text
+    est : varchar(50)
+}
+
+entity practica_oferta {
+    * codPracOfe : int <<PK>>
+    --
+    titulo : varchar(150)
+    descrip : text
+    funcion : int
+    req : varchar(50)
+    modal : int
+    horar : varchar(50)
+    durac : int
+    remune : int
+    fechpub : datetime
+    fecierre : datetime
+    cantvac : int
+    est : varchar(50)
+    codSuc : int <<FK>>
+}
+
+entity convenio_carrera {
+    * codCon : int <<PK, FK>>
+    * codCar : int <<PK, FK>>
+}
+
+entity postulacion {
+    * codPost : int <<PK>>
+    --
+    fecpost : datetime
+    estpost : varchar(50)
+    puntaje : int
+    fechresp : datetime
+    medcontac : int
+    codEst : int <<FK>>
+    observ : text
+    codPracOfe : int <<FK>>
+}
+
+entity practicaoferta_carrera {
+    * codPracOfe : int <<PK, FK>>
+    * codCar : int <<PK, FK>>
+}
+
+entity informefinal {
+    * codInforFi : int <<PK>>
+    --
+    titu : varchar(100)
+    fechent : datetime
+    estrev : varchar(30)
+    obsase : text
+    notfin : decimal(5,2)
+    fechpro : datetime
+}
+
+entity practicarealizada {
+    * codPracReal : int <<PK>>
+    --
+    fecinic : datetime
+    fecfin : datetime
+    modalidad : int
+    jornsema : int
+    est : varchar(50)
+    horacumul : int
+    areaasign : int
+    observ : text
+    codAse : int <<FK>>
+    codSup : int <<FK>>
+}
+
+entity practicarealizada_informefinal {
+    * codInforFi : int <<PK, FK>>
+    * codPracReal : int <<PK, FK>>
+}
+
+entity seguimiento {
+    * codSeg : int <<PK>>
+    --
+    fech : date
+    tip : varchar(50)
+    descrip : varchar(255)
+    dificencontradas : text
+    observ : text
+    porcenavanc : int
+    recomend : text
+    est : varchar(50)
+    codPracReal : int <<FK>>
+}
+
+entity certificado {
+    * codPracReal : int <<PK, FK>>
+    --
+    numcert : varchar(50)
+    fechemi : date
+    horacert : int
+    cargdese : varchar(100)
+    firmresp : varchar(100)
+    obs : text
+}
+
+entity evaluacion {
+    * codEval : int <<PK>>
+    --
+    fech : date
+    crit : varchar(50)
+    coment : varchar(255)
+    observ : int
+    resultfin : text
+    codPracReal : int <<FK>>
+}
+
+' Relaciones
+
+facultad ||--o{ carrera
+usuario ||--o{ usuario_rol
+rol ||--o{ usuario_rol
+
+usuario ||--|| estudiante
+carrera ||--o{ estudiante
+
+empresa ||--o{ sucursal
+empresa ||--o{ convenio
+
+estudiante ||--o{ documento
+
+usuario ||--|| asesor
+facultad ||--o{ asesor
+
+usuario ||--|| supervisor
+
+sucursal ||--o{ practica_oferta
+
+convenio ||--o{ convenio_carrera
+carrera ||--o{ convenio_carrera
+
+estudiante ||--o{ postulacion
+practica_oferta ||--o{ postulacion
+
+practica_oferta ||--o{ practicaoferta_carrera
+carrera ||--o{ practicaoferta_carrera
+
+asesor ||--o{ practicarealizada
+supervisor ||--o{ practicarealizada
+
+informefinal ||--o{ practicarealizada_informefinal
+practicarealizada ||--o{ practicarealizada_informefinal
+
+practicarealizada ||--o{ seguimiento
+
+practicarealizada ||--|| certificado
+
+seguimiento ||--o{ evaluacion
+
+@enduml
