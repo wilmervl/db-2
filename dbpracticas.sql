@@ -218,8 +218,10 @@ create table seguimiento (
     porcenavanc int,
     recomend text,
     est varchar(50),
-    codPracReal int,
-    constraint fk_practicarealizada foreign key (codPracReal) references practicarealizada (codPracReal)
+    codPracReal int unique,
+    constraint fk_practicarealizada
+    foreign key (codPracReal)
+    references practicarealizada (codPracReal)
 );
 
 create table certificado(
