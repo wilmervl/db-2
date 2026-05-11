@@ -208,21 +208,7 @@ create table informefinal (
     constraint fk_informefinal_practicarealizada foreign key (codInforFi) references practicarealizada (codPracReal)
 );
 
-create table seguimiento (
-    codSeg int auto_increment primary key,
-    fech date,
-    tip varchar(50),
-    descrip varchar(255),
-    dificencontradas text,
-    observ text,
-    porcenavanc int,
-    recomend text,
-    est varchar(50),
-    codPracReal int unique,
-    constraint fk_practicarealizada
-    foreign key (codPracReal)
-    references practicarealizada (codPracReal)
-);
+
 
 create table certificado(
     codPracReal int primary key,
@@ -235,6 +221,22 @@ create table certificado(
     foreign key (codPracReal) references practicarealizada(codPracReal)
 );
 
+create table seguimiento (
+    codSeg int auto_increment primary key,
+    fech date,
+    tip varchar(50),
+    descrip varchar(255),
+    dificencontradas text,
+    observ text,
+    porcenavanc int,
+    recomend text,
+    est varchar(50),
+    codPracReal int not null,
+    constraint fk_practicarealizada
+    foreign key (codPracReal)
+    references practicarealizada (codPracReal)
+);
+
 create table evaluacion (
     codEval int auto_increment primary key,
     fech date,
@@ -242,6 +244,6 @@ create table evaluacion (
     coment varchar(255),
     observ int,
     resultfin text,
-    codPracReal int,
-    constraint fk_seguimiento foreign key (codPracReal) references seguimiento(codPracReal)
+    codSeg int,
+    constraint fk_evaluacion_seguimiento foreign key (codSeg) references seguimiento(codSeg)
 );
