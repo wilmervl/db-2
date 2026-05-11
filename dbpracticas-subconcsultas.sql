@@ -24,7 +24,7 @@ where canttrabaj >
 )
 and est = 'activo';
 
-/*3. estudiantes con más documentos que el promedio*/
+/*3. estudiantes que realizaron más postulaciones que el promedio*/
 select
     codEst,
     codUni
@@ -32,42 +32,43 @@ from estudiante
 where codEst in
 (
     select codEst
-    from documento
+    from postulacion
     group by codEst
     having count(*) >
     (
-        select avg(totaldoc)
+        select avg(totalpost)
         from
         (
-            select count(*) as totaldoc
-            from documento
+            select count(*) as totalpost
+            from postulacion
             group by codEst
         ) as promedio
     )
 );
 
-/*4. carreras con más estudiantes que el promedio de carreras*/
-select 
-    codCar,
-    nom
-from carrera
-where codCar in
+/*4. ofertas de prácticas con más postulaciones que el promedio*/
+select
+    codPracOfe,
+    titulo
+from practica_oferta
+where codPracOfe in
 (
-    select codCar
-    from estudiante
-    group by codCar
+    select codPracOfe
+    from postulacion
+    group by codPracOfe
     having count(*) >
     (
-        select avg(totalest)
+        select avg(totalpost)
         from
         (
-            select count(*) as totalest
-            from estudiante
-            group by codCar
+            select count(*) as totalpost
+            from postulacion
+            group by codPracOfe
         ) as promedio
     )
 );
-/*5. empresas con más sucursales que el promedio*/
+
+/*5. empresas con más convenios que el promedio*/
 select
     codEmp,
     razsocial
@@ -75,19 +76,20 @@ from empresa
 where codEmp in
 (
     select codEmp
-    from sucursal
+    from convenio
     group by codEmp
     having count(*) >
     (
-        select avg(totalsuc)
+        select avg(totalconv)
         from
         (
-            select count(*) as totalsuc
-            from sucursal
+            select count(*) as totalconv
+            from convenio
             group by codEmp
         ) as promedio
     )
 );
+
 /*6. asesores pertenecientes a facultades con carreras activas*/
 
 select 
@@ -103,17 +105,18 @@ where codFac in
 );
 
 /*7. postulaciones con puntaje mayor al promedio y aprobadas*/
-select 
-    codPost,
-    puntaje,
-    estpost
-from postulacion
-where puntaje >
+/*7. ofertas de prácticas con más vacantes que el promedio y activas*/
+select
+    codPracOfe,
+    titulo,
+    cantvac
+from practica_oferta
+where cantvac >
 (
-    select avg(puntaje)
-    from postulacion
+    select avg(cantvac)
+    from practica_oferta
 )
-and estpost = 'aprobado';
+and est = 'activo';
 
 /*8. supervisores que supervisan más de una práctica*/
 select 
