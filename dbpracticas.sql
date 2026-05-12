@@ -1,3 +1,4 @@
+drop database if exists dbpracticas;
 create database dbpracticas;
 
 use dbpracticas;
@@ -11,15 +12,13 @@ create table rol (
 
 create table usuario (
     codUsu int auto_increment primary key,
-    nom1 varchar(20) not null,
-    nom2 varchar(20) not null,
-    ape1 varchar(20) not null,
-    ape2 varchar(20) not null,
+    nom varchar(50) not null,
+    ape varchar(50) not null,
     correo varchar(150) unique not null,
     contr varchar(150),
-    tel varchar(20),
+    tel varchar(20) unique,
     dire varchar(150),
-    fechnac datetime,
+    fechnac date,
     estado varchar(50)
 );
 
@@ -74,7 +73,7 @@ create table estudiante (
 );
 
 create table sucursal (
-    codsuc int auto_increment  primary key,
+    codSuc int auto_increment  primary key,
     nomsuc varchar(150),
     dist varchar(100),
     ciu varchar(100),
@@ -133,7 +132,7 @@ create table supervisor (
     constraint fk_usuario_supervisor foreign key (codSup) references usuario (codUsu)
 );
 
-create table practica_oferta (
+create table practicaoferta (
     codPracOfe int primary key,
     titulo varchar(150) not null,
     descrip TEXT,
@@ -169,7 +168,7 @@ create table postulacion (
     codEst int,
     observ TEXT,
     codPracOfe int,
-    constraint fk_practicaoferta foreign key (codPracOfe) references practica_oferta (codPracOfe),
+    constraint fk_practicaoferta foreign key (codPracOfe) references practicaoferta (codPracOfe),
     constraint fk_estudiante_postulacion foreign key (codEst) references estudiante (codEst)
 );
 
@@ -177,7 +176,7 @@ create table practicaoferta_carrera (
     codPracOfe int,
     codCar int,
     primary key (codPracOfe, codCar),
-    foreign key (codPracOfe) references practica_oferta (codPracOfe),
+    foreign key (codPracOfe) references practicaoferta (codPracOfe),
     foreign key (codCar) references carrera (codCar)
 );
 
