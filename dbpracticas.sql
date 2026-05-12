@@ -12,9 +12,9 @@ create table rol (
 
 create table usuario (
     codUsu int auto_increment primary key,
-    nom varchar(50) not null,
-    ape varchar(50) not null,
-    correo varchar(150) unique not null,
+    nom varchar(60) not null,
+    ape varchar(60) not null,
+    correo varchar(250) unique not null,
     contr varchar(150),
     tel varchar(20) unique,
     dire varchar(150),
@@ -23,16 +23,16 @@ create table usuario (
 );
 
 create table empresa (
-    codEmp int auto_increment primary key,
+    codEmp int primary key,
     ruc CHAR(13) unique not null,
-    razsocial varchar(50),
-    nomcomer varchar(100),
-    dirfisc varchar(150),
+    razsocial varchar(100),
+    nomcomer varchar(200),
+    dirfisc varchar(350),
     telprinc varchar(20),
-    correo varchar(150),
-    pagweb varchar(100),
-    reprelegal varchar(150),
-    fechcrea datetime not null,
+    correo varchar(250),
+    pagweb varchar(600),
+    reprelegal varchar(250),
+    fechcrea date not null,
     canttrabaj int,
     est varchar(50)
 );
@@ -73,15 +73,15 @@ create table estudiante (
 );
 
 create table sucursal (
-    codSuc int auto_increment  primary key,
-    nomsuc varchar(150),
-    dist varchar(100),
-    ciu varchar(100),
-    tel varchar(20),
-    corr_cont varchar(150),
-    respsuc varchar(150),
-    codEmp int,
-    foreign key (codEmp) references empresa(codEmp)
+  codSuc int auto_increment primary key,
+  nomsuc varchar(150),
+  dist varchar(100),
+  ciu varchar(100),
+  tel varchar(20),
+  corr_cont varchar(150),
+  respsuc varchar(150),
+  codEmp int,
+  constraint fk_sucursal_empresa foreign key (codEmp) references empresa(codEmp)
 );
 
 create table convenio (
@@ -147,7 +147,7 @@ create table practicaoferta (
     cantvac int,
     est varchar(50),
     codSuc int,
-    constraint fk_sucursal foreign key (codSuc) references sucursal (codsuc)
+    constraint fk_practicaoferta_sucursal foreign key (codSuc) references sucursal(codSuc)
 );
 
 create table convenio_carrera (
@@ -212,7 +212,7 @@ create table informefinal (
 create table certificado(
     codPracReal int primary key,
     numcert varchar(50),
-    fechemi date,
+    fechemi datetime,
     horacert int ,
     cargdese varchar(100),
     firmresp varchar(100),
@@ -222,7 +222,7 @@ create table certificado(
 
 create table seguimiento (
     codSeg int auto_increment primary key,
-    fech date,
+    fech datetime,
     tip varchar(50),
     descrip varchar(255),
     dificencontradas text,
@@ -238,7 +238,7 @@ create table seguimiento (
 
 create table evaluacion (
     codEval int auto_increment primary key,
-    fech date,
+    fech datetime,
     crit varchar(50),
     coment varchar(255),
     observ int,

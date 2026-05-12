@@ -12,7 +12,7 @@ UNION ALL SELECT 'facultad', COUNT(*) FROM facultad
 UNION ALL SELECT 'informefinal', COUNT(*) FROM informefinal
 UNION ALL SELECT 'postulacion', COUNT(*) FROM postulacion
 UNION ALL SELECT 'practicaoferta_carrera', COUNT(*) FROM practicaoferta_carrera
-UNION ALL SELECT 'practica_oferta', COUNT(*) FROM practica_oferta
+UNION ALL SELECT 'practica_oferta', COUNT(*) FROM practicaoferta
 UNION ALL SELECT 'practicarealizada', COUNT(*) FROM practicarealizada
 UNION ALL SELECT 'rol', COUNT(*) FROM rol
 UNION ALL SELECT 'seguimiento', COUNT(*) FROM seguimiento
