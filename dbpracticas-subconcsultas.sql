@@ -1,33 +1,51 @@
-/*1. estudiantes con promedio mayor al promedio de su carrera*/
-select
-    codEst,
-    codUni,
-    promponder
-from estudiante e
-where promponder >
-(
-  select avg(promponder)
-  from estudiante
-  where codCar = e.codCar
-);
+/* 1. Estudiantes cuyo promedio ponderado es mayor al promedio
+   de los estudiantes de su mismo ciclo y carrera,
+   mostrando la carrera y ordenados por promedio ponderado */
+SELECT
+    (
+        SELECT c.nom
+        FROM carrera c
+        WHERE c.codCar = e.codCar
+    ) AS carrera,
+    (
+        SELECT CONCAT(u.nom, ' ', u.ape)
+        FROM usuario u
+        WHERE u.codUsu = e.codEst
+    ) AS estudiante,
+    e.codUni,
+    e.ciclo,
+    e.promponder
+FROM estudiante e
+WHERE e.promponder > (
+    SELECT AVG(e2.promponder)
+    FROM estudiante e2
+    WHERE e2.codCar = e.codCar
+      AND e2.ciclo = e.ciclo
+)
+ORDER BY
+    e.promponder DESC;
+/*2. empresas con más trabajadores que el promedio general
+y que estén activas*/
 
-/*2. empresas con más trabajadores que el promedio general y activas*/
-select 
-  codEmp,
-  razsocial,
-  canttrabaj
+select
+    codEmp,
+    razsocial,
+    canttrabaj
 from empresa
 where canttrabaj >
 (
-  select avg(canttrabaj)
-  from empresa
+    select avg(canttrabaj)
+    from empresa
 )
-and est = 'activo';
+and est = 'activo'
+limit 100;
+/*3. estudiantes que realizaron más postulaciones
+que el promedio de postulaciones*/
 
-/*3. estudiantes que realizaron más postulaciones que el promedio*/
 select
     codEst,
-    codUni
+    codUni,
+    codCar
 from estudiante
 where codEst in
 (
@@ -36,39 +54,59 @@ where codEst in
     group by codEst
     having count(*) >
     (
-        select avg(totalpost)
+        select avg(cantidad)
         from
         (
-            select count(*) as totalpost
+            select count(*) as cantidad
             from postulacion
             group by codEst
-        ) as promedio
+        ) t
     )
-);
+)
+order by codCar
+limit 100;
+/*3. estudiantes que realizaron más postulaciones
+que el promedio de postulaciones*/
 
-/*4. ofertas de prácticas con más postulaciones que el promedio*/
 select
-    codPracOfe,
-    titulo
-from practica_oferta
-where codPracOfe in
+    codEst,
+    codUni,
+    codCar
+from estudiante
+where codEst in
 (
-    select codPracOfe
+    select codEst
     from postulacion
-    group by codPracOfe
+    group by codEst
     having count(*) >
     (
-        select avg(totalpost)
+        select avg(cantidad)
         from
         (
-            select count(*) as totalpost
+            select count(*) as cantidad
             from postulacion
-            group by codPracOfe
-        ) as promedio
+            group by codEst
+        ) t
     )
-);
+)
+order by codCar
+limit 100;
+/*4. ofertas de prácticas con más vacantes
+que el promedio*/
 
+select
+    codPracOfe,
+    titulo,
+    cantvac
+from practicaoferta
+where cantvac >
+(
+    select avg(cantvac)
+    from practicaoferta
+)
+limit 100;
 /*5. empresas con más convenios que el promedio*/
+
 select
     codEmp,
     razsocial
@@ -80,46 +118,50 @@ where codEmp in
     group by codEmp
     having count(*) >
     (
-        select avg(totalconv)
+        select avg(cantidad)
         from
         (
-            select count(*) as totalconv
+            select count(*) as cantidad
             from convenio
             group by codEmp
-        ) as promedio
+        ) t
     )
-);
+)
+limit 100;
+/*6. asesores pertenecientes a facultades
+con carreras activas*/
 
-/*6. asesores pertenecientes a facultades con carreras activas*/
-
-select 
-  codAse,
-  espec,
-  codFac
+select
+    codAse,
+    espec,
+    codFac
 from asesor
 where codFac in
 (
-  select codFac
-  from carrera
-  where est = 'activo'
-);
+    select codFac
+    from carrera
+    where est = 'activo'
+)
+limit 100;
+/*7. ofertas activas con vacantes mayores
+al promedio*/
 
-/*7. postulaciones con puntaje mayor al promedio y aprobadas*/
-/*7. ofertas de prácticas con más vacantes que el promedio y activas*/
 select
     codPracOfe,
     titulo,
     cantvac
-from practica_oferta
+from practicaoferta
 where cantvac >
 (
     select avg(cantvac)
-    from practica_oferta
+    from practicaoferta
 )
-and est = 'activo';
+and est = 'activo'
+limit 100;
+/*8. supervisores que supervisan
+más de una práctica*/
 
-/*8. supervisores que supervisan más de una práctica*/
-select 
+select
     codSup,
     carg
 from supervisor
@@ -129,10 +171,12 @@ where codSup in
     from practicarealizada
     group by codSup
     having count(*) > 1
-);
+)
+limit 100;
+/*9. convenios de empresas con más trabajadores
+que el promedio*/
 
-/*9. convenios de empresas con más trabajadores que el promedio*/
-select 
+select
     codCon,
     tipconv
 from convenio
@@ -145,11 +189,14 @@ where codEmp in
         select avg(canttrabaj)
         from empresa
     )
-);
+)
+limit 100;
 /*10. estudiantes con más de 3 postulaciones*/
-select 
+
+select
     codEst,
-    codUni
+    codUni,
+    codCar
 from estudiante
 where codEst in
 (
@@ -157,4 +204,6 @@ where codEst in
     from postulacion
     group by codEst
     having count(*) > 3
-);
+)
+order by codCar
+limit 100;

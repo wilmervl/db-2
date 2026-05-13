@@ -65,7 +65,7 @@ create table estudiante (
     codEst int primary key,
     codUni varchar(10) unique not null,
     ciclo int not null,
-    promponder int,
+    promponder decimal(6, 4) not null,
     codCar int not null,
     estacad varchar(50),
     constraint fk_carrera_estudiante foreign key (codCar) references carrera(codCar),

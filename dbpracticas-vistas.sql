@@ -1,58 +1,59 @@
 /*1. vista estudiantes*/
 create view vw_estudiante as
 select 
-    e.codEst,
-    e.codUni,
-    concat(u.nom1,' ',u.nom2) as nombres,
-    concat(u.ape1,' ',u.ape2) as apellidos,
+    e.codest,
+    e.coduni,
+    u.nom as nombres,
+    u.ape as apellidos,
     u.correo,
     u.tel,
     u.dire,
     u.fechnac,
     u.estado,
-    c.codCar,
+    c.codcar,
     c.nom as carrera,
     c.durcic,
     c.gradacad,
     c.dircarr,
-    f.codFac,
+    f.codfac,
     f.nom as facultad,
     e.ciclo,
     e.promponder,
     e.estacad
 from estudiante e
 inner join usuario u
-on e.codEst = u.codUsu
+on e.codest = u.codusu
 inner join carrera c
-on e.codCar = c.codCar
+on e.codcar = c.codcar
 inner join facultad f
-on c.codFac = f.codFac
+on c.codfac = f.codfac
 where u.estado = 'activo';
+
 /*2. vista asesores*/
 create view vw_asesores as
 select
-    a.codAse,
-    concat(u.nom1,' ',u.nom2) as nombres,
-    concat(u.ape1,' ',u.ape2) as apellidos,
+    a.codase,
+    u.nom as nombres,
+    u.ape as apellidos,
     u.correo,
     u.tel,
     u.dire,
     u.estado,
     a.espec,
-    f.codFac,
+    f.codfac,
     f.nom as facultad
 from asesor a
 inner join usuario u
-on a.codAse = u.codUsu
+on a.codase = u.codusu
 inner join facultad f
-on a.codFac = f.codFac;
+on a.codfac = f.codfac;
 
 /*3. vista supervisores*/
 create view vw_supervisores as
-select 
-    s.codSup,
-    concat(u.nom1,' ',u.nom2) as nombres,
-    concat(u.ape1,' ',u.ape2) as apellidos,
+select
+    s.codsup,
+    u.nom as nombres,
+    u.ape as apellidos,
     u.correo,
     u.tel,
     u.dire,
@@ -62,11 +63,12 @@ select
     s.exp_lab
 from supervisor s
 inner join usuario u
-on s.codSup = u.codUsu;
+on s.codsup = u.codusu;
+
 /*4. vista practicas ofertas*/
 create view vw_practicas_ofertas as
 select
-    p.codPracOfe,
+    p.codpracofe,
     p.titulo,
     p.descrip,
     p.funcion,
@@ -82,137 +84,138 @@ select
     s.codsuc,
     s.nomsuc,
     s.ciu,
-    e.codEmp,
+    e.codemp,
     e.nomcomer as empresa
-from practica_oferta p
+from practicaoferta p
 inner join sucursal s
-on p.codSuc = s.codsuc
+on p.codsuc = s.codsuc
 inner join empresa e
-on s.codEmp = e.codEmp;
-/*5. Vista de empresas y cantidad de sucursales*/
-CREATE VIEW vw_empresas_sucursales AS
-SELECT 
-    emp.codEmp,
+on s.codemp = e.codemp;
+
+/*5. vista de empresas y cantidad de sucursales*/
+create view vw_empresas_sucursales as
+select
+    emp.codemp,
     emp.razsocial,
     emp.ruc,
-    COUNT(s.codsuc) AS total_sucursales
-FROM empresa emp
-INNER JOIN sucursal s
-    ON emp.codEmp = s.codEmp
-GROUP BY emp.codEmp, emp.razsocial, emp.ruc
-ORDER BY total_sucursales DESC;
+    count(s.codsuc) as total_sucursales
+from empresa emp
+inner join sucursal s
+on emp.codemp = s.codemp
+group by emp.codemp, emp.razsocial, emp.ruc
+order by total_sucursales desc;
 
 /*6. vista carreras*/
 create view vw_carreras as
-select 
-    c.codCar,
+select
+    c.codcar,
     c.nom as carrera,
     c.durcic,
     c.gradacad,
     c.dircarr,
     c.est,
-    f.codFac,
+    f.codfac,
     f.nom as facultad
 from carrera c
 inner join facultad f
-on c.codFac = f.codFac;
+on c.codfac = f.codfac;
 
-/*7. vista postulaciones*/
-CREATE VIEW vw_ofertas_activas AS
-SELECT 
-    po.codPracOfe,
+/*7. vista ofertas activas*/
+create view vw_ofertas_activas as
+select
+    po.codpracofe,
     po.titulo,
     po.req,
     po.remune,
     po.cantvac,
     s.nomsuc,
-    emp.razsocial AS empresa,
-    DATEDIFF(po.fecierre, NOW()) AS dias_restantes
-FROM practica_oferta po
-INNER JOIN sucursal s
-    ON po.codSuc = s.codsuc
-INNER JOIN empresa emp
-    ON s.codEmp = emp.codEmp
-WHERE po.est = 'ACTIVO'
-ORDER BY po.remune DESC;
+    emp.razsocial as empresa,
+    datediff(po.fecierre, now()) as dias_restantes
+from practicaoferta po
+inner join sucursal s
+on po.codsuc = s.codsuc
+inner join empresa emp
+on s.codemp = emp.codemp
+where po.est = 'activo'
+order by po.remune desc;
 
-/*8. Vista de postulaciones por estudiante */
-CREATE VIEW vw_postulaciones_estudiantes AS
-SELECT 
-    p.codPost,
-    CONCAT(u.nom1, ' ', u.ape1) AS estudiante,
+/*8. vista de postulaciones por estudiante*/
+create view vw_postulaciones_estudiantes as
+select
+    p.codpost,
+    concat(u.nom, ' ', u.ape) as estudiante,
     po.titulo,
-    emp.razsocial AS empresa,
+    emp.razsocial as empresa,
     p.puntaje,
     p.estpost,
     p.fecpost
-FROM postulacion p
-INNER JOIN estudiante e
-    ON p.codEst = e.codEst
-INNER JOIN usuario u
-    ON e.codEst = u.codUsu
-INNER JOIN practica_oferta po
-    ON p.codPracOfe = po.codPracOfe
-INNER JOIN sucursal s
-    ON po.codSuc = s.codsuc
-INNER JOIN empresa emp
-    ON s.codEmp = emp.codEmp
-ORDER BY p.puntaje DESC;
+from postulacion p
+inner join estudiante e
+on p.codest = e.codest
+inner join usuario u
+on e.codest = u.codusu
+inner join practicaoferta po
+on p.codpracofe = po.codpracofe
+inner join sucursal s
+on po.codsuc = s.codsuc
+inner join empresa emp
+on s.codemp = emp.codemp
+order by p.puntaje desc;
 
-/*9. Vista de cantidad de postulantes por oferta */
-CREATE VIEW vw_postulantes_por_oferta AS
-SELECT 
-    po.codPracOfe,
+/*9. vista de cantidad de postulantes por oferta*/
+create view vw_postulantes_por_oferta as
+select
+    po.codpracofe,
     po.titulo,
-    COUNT(p.codPost) AS cantidad_postulantes
-FROM practica_oferta po
-INNER JOIN postulacion p
-    ON po.codPracOfe = p.codPracOfe
-GROUP BY po.codPracOfe, po.titulo
-ORDER BY cantidad_postulantes DESC;
+    count(p.codpost) as cantidad_postulantes
+from practicaoferta po
+inner join postulacion p
+on po.codpracofe = p.codpracofe
+group by po.codpracofe, po.titulo
+order by cantidad_postulantes desc;
 
-/*10. Vista de promedio de puntajes por carrera */
-CREATE VIEW vw_promedio_puntaje_carrera AS
-SELECT 
-    c.nom AS carrera,
-    AVG(p.puntaje) AS promedio_puntaje,
-    MAX(p.puntaje) AS mayor_puntaje,
-    MIN(p.puntaje) AS menor_puntaje
-FROM postulacion p
-INNER JOIN estudiante e
-    ON p.codEst = e.codEst
-INNER JOIN carrera c
-    ON e.codCar = c.codCar
-GROUP BY c.nom
-ORDER BY promedio_puntaje DESC;
+/*10. vista de promedio de puntajes por carrera*/
+create view vw_promedio_puntaje_carrera as
+select
+    c.nom as carrera,
+    avg(p.puntaje) as promedio_puntaje,
+    max(p.puntaje) as mayor_puntaje,
+    min(p.puntaje) as menor_puntaje
+from postulacion p
+inner join estudiante e
+on p.codest = e.codest
+inner join carrera c
+on e.codcar = c.codcar
+group by c.nom
+order by promedio_puntaje desc;
 
-/* 11. empresas con más ofertas */
-CREATE VIEW vw_empresas_mas_ofertas AS
-SELECT 
+/*11. empresas con más ofertas*/
+create view vw_empresas_mas_ofertas as
+select
     emp.razsocial,
     (
-        SELECT COUNT(*)
-        FROM practica_oferta po
-        INNER JOIN sucursal s
-            ON po.codSuc = s.codsuc
-        WHERE s.codEmp = emp.codEmp
-    ) AS total_ofertas
-FROM empresa emp
-ORDER BY total_ofertas DESC;
+        select count(*)
+        from practicaoferta po
+        inner join sucursal s
+        on po.codsuc = s.codsuc
+        where s.codemp = emp.codemp
+    ) as total_ofertas
+from empresa emp
+order by total_ofertas desc;
 
-/* 12. Vista de convenios por empresa y carreras */
-CREATE VIEW vw_convenios_carreras AS
-SELECT 
+/*12. vista de convenios por empresa y carreras*/
+create view vw_convenios_carreras as
+select
     emp.razsocial,
-    c.nom AS carrera,
+    c.nom as carrera,
     con.tipconv,
     con.numvac,
     con.est
-FROM convenio con
-INNER JOIN empresa emp
-    ON con.codEmp = emp.codEmp
-INNER JOIN convenio_carrera cc
-    ON con.codCon = cc.codCon
-INNER JOIN carrera c
-    ON cc.codCar = c.codCar
-ORDER BY emp.razsocial;
+from convenio con
+inner join empresa emp
+on con.codemp = emp.codemp
+inner join convenio_carrera cc
+on con.codcon = cc.codcon
+inner join carrera c
+on cc.codcar = c.codcar
+order by emp.razsocial;
